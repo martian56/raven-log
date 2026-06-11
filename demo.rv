@@ -1,0 +1,26 @@
+// A walk through raven-log. Build and run with:
+//   raven build demo.rv -o demo && ./demo
+import std/io { println }
+import "./lib" { Logger, Level, info, warn, error }
+
+fun main() {
+    println("== package-level functions (shared Info logger) ==")
+    info("server started")
+    warn("disk almost full")
+    error("connection refused")
+
+    println("")
+    println("== a configured logger (named, Debug and up) ==")
+    let log = Logger.new().named("api").level(Level.Debug)
+    log.debug("handling GET /users")
+    log.info("200 OK in 4ms")
+    log.warn("slow query: 820ms")
+    log.error("upstream timeout")
+
+    println("")
+    println("== plain, no color, filtered to Warn and up ==")
+    let q = Logger.new().colored(false).level(Level.Warn).named("worker")
+    q.info("this line is dropped")
+    q.warn("retrying job 42")
+    q.error("job 42 failed")
+}

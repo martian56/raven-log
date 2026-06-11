@@ -1,0 +1,31 @@
+import std/test { assert_true, assert_false, assert_eq_str }
+import "./lib" { Logger, Level }
+
+fun test_levels_ordered_by_severity() {
+    assert_true(Level.Error.compare(Level.Debug) > 0)
+    assert_true(Level.Debug.compare(Level.Warn) < 0)
+    assert_true(Level.Info.compare(Level.Info) == 0)
+}
+
+fun test_enabled_drops_below_min() {
+    let log = Logger.new().level(Level.Warn)
+    assert_false(log.enabled(Level.Debug))
+    assert_false(log.enabled(Level.Info))
+    assert_true(log.enabled(Level.Warn))
+    assert_true(log.enabled(Level.Error))
+}
+
+fun test_render_plain() {
+    let log = Logger.new().colored(false)
+    assert_eq_str(log.render(Level.Info, "hello"), "[INFO ] hello")
+}
+
+fun test_render_named() {
+    let log = Logger.new().colored(false).named("api")
+    assert_eq_str(log.render(Level.Error, "boom"), "[ERROR] api: boom")
+}
+
+fun test_render_colored_wraps_tag() {
+    let log = Logger.new()
+    assert_eq_str(log.render(Level.Warn, "x"), "\u{1b}[33m[WARN ]\u{1b}[0m x")
+}
