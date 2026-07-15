@@ -1,5 +1,7 @@
 # raven-log
 
+[![CI](https://github.com/martian56/raven-log/actions/workflows/ci.yml/badge.svg)](https://github.com/martian56/raven-log/actions/workflows/ci.yml)
+
 A leveled logger for Raven. Four levels, a minimum-level filter, colored tags
 when you want them, and an optional name to mark which part of the app a line
 came from. It's just `lib.rv`, no dependencies.
@@ -8,7 +10,7 @@ came from. It's just `lib.rv`, no dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-log" = "0.1"
+"github.com/martian56/raven-log" = "v0.1.0"
 ```
 
 ## Usage
@@ -16,7 +18,7 @@ came from. It's just `lib.rv`, no dependencies.
 For a quick script, the package-level functions log through a shared logger set
 to Info:
 
-```raven
+```rust
 import "github.com/martian56/raven-log" { info, warn, error }
 
 fun main() {
@@ -30,7 +32,7 @@ When you want your own settings, build a `Logger` and chain the configuration.
 Each call hands back a configured copy, so a `Logger` is just a value you can
 pass around:
 
-```raven
+```rust
 import "github.com/martian56/raven-log" { Logger, Level }
 
 fun main() {
