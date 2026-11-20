@@ -1,5 +1,5 @@
-import std/test { assert_true, assert_false, assert_eq_str }
-import "./lib" { Logger, Level }
+from std.test import assert_true, assert_false, assert_eq_str
+from "./lib" import Logger, Level
 
 fun test_levels_ordered_by_severity() {
     assert_true(Level.Error.compare(Level.Debug) > 0)

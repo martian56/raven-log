@@ -1,7 +1,7 @@
 // A walk through raven-log. Build and run with:
-//   raven build demo.rv -o demo && ./demo
-import std/io { println }
-import "./lib" { Logger, Level, info, warn, error }
+//   raven build demo.rv -o demo and ./demo
+from std.io import println
+from "./lib" import Logger, Level, info, warn, error
 
 fun main() {
     println("== package-level functions (shared Info logger) ==")

@@ -19,7 +19,7 @@ For a quick script, the package-level functions log through a shared logger set
 to Info:
 
 ```rust
-import "github.com/martian56/raven-log" { info, warn, error }
+from "github.com/martian56/raven-log" import info, warn, error
 
 fun main() {
     info("server started")
@@ -33,7 +33,7 @@ Each call hands back a configured copy, so a `Logger` is just a value you can
 pass around:
 
 ```rust
-import "github.com/martian56/raven-log" { Logger, Level }
+from "github.com/martian56/raven-log" import Logger, Level
 
 fun main() {
     let log = Logger.new().named("api").level(Level.Debug)
