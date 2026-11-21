@@ -10,7 +10,7 @@ came from. It's just `lib.rv`, no dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-log" = "v0.1.0"
+"github.com/martian56/raven-log" = "v0.2.0"
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ For a quick script, the package-level functions log through a shared logger set
 to Info:
 
 ```rust
-import "github.com/martian56/raven-log" { info, warn, error }
+from "github.com/martian56/raven-log" import info, warn, error
 
 fun main() {
     info("server started")
@@ -33,7 +33,7 @@ Each call hands back a configured copy, so a `Logger` is just a value you can
 pass around:
 
 ```rust
-import "github.com/martian56/raven-log" { Logger, Level }
+from "github.com/martian56/raven-log" import Logger, Level
 
 fun main() {
     let log = Logger.new().named("api").level(Level.Debug)
@@ -85,8 +85,7 @@ compare levels directly. `level.label()` gives the padded tag (`"INFO "`) and
 
 ## Requirements
 
-Needs raven 2.18.52 or newer, where `@derive(Ord)` is what puts the levels in
-order.
+Needs Raven 3.0.0 or newer. `@derive(Ord)` is what puts the levels in order.
 
 ## License
 

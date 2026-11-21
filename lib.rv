@@ -3,21 +3,21 @@
 // Two ways to use it. For quick scripts, the package-level functions log
 // through a shared default logger:
 //
-//     import "github.com/martian56/raven-log" { info, warn }
+//     from "github.com/martian56/raven-log" import info, warn
 //     info("server started")
 //     warn("disk almost full")
 //
 // For libraries and apps that want their own configuration, build a Logger
 // with the fluent, immutable builder and call its methods:
 //
-//     import "github.com/martian56/raven-log" { Logger, Level }
+//     from "github.com/martian56/raven-log" import Logger, Level
 //     let log = Logger.new().named("api").level(Level.Debug)
 //     log.debug("handling request")
 //
 // Lines are written to standard output as `[LEVEL] name: message`, with the
 // level tag colored when color is enabled (the default).
 
-import std/io { println }
+from std.io import println
 
 // Severity levels in ascending order, so the derived `Ord` compares them by
 // severity: `Debug < Info < Warn < Error`. A logger drops any message below
@@ -32,22 +32,22 @@ enum Level {
 
 impl Level {
     // A fixed-width uppercase label, so log lines line up in a column.
-    fun label(self) -> String {
+    fun label(self) -> str {
         return match self {
-            Debug -> "DEBUG",
-            Info -> "INFO ",
-            Warn -> "WARN ",
-            Error -> "ERROR",
+            case Debug { "DEBUG" }
+            case Info { "INFO " }
+            case Warn { "WARN " }
+            case Error { "ERROR" }
         }
     }
 
     // The ANSI SGR escape that colors this level's tag.
-    fun color(self) -> String {
+    fun color(self) -> str {
         return match self {
-            Debug -> "\u{1b}[2m",
-            Info -> "\u{1b}[36m",
-            Warn -> "\u{1b}[33m",
-            Error -> "\u{1b}[31m",
+            case Debug { "\u{1b}[2m" }
+            case Info { "\u{1b}[36m" }
+            case Warn { "\u{1b}[33m" }
+            case Error { "\u{1b}[31m" }
         }
     }
 }
@@ -55,64 +55,64 @@ impl Level {
 // A configured logger. Construct one with `Logger.new()` and refine it with the
 // fluent methods; each returns a configured copy, so a `Logger` is a cheap,
 // shareable value with no hidden state.
-struct Logger {
-    min: Level,
-    name: String,
-    use_color: Bool,
+class Logger {
+    min: Level
+    name: str
+    use_color: bool
 }
 
 impl Logger {
     // A logger at `Info`, unnamed, with colored level tags.
     fun new() -> Logger {
-        return Logger { min: Level.Info, name: "", use_color: true }
+        return Logger(min: Level.Info, name: "", use_color: true)
     }
 
     // The minimum level to emit. Messages below it are dropped.
     fun level(self, min: Level) -> Logger {
-        return Logger { min, name: self.name, use_color: self.use_color }
+        return Logger(min: min, name: self.name, use_color: self.use_color)
     }
 
     // A name shown before each message, useful to tag a subsystem.
-    fun named(self, name: String) -> Logger {
-        return Logger { min: self.min, name, use_color: self.use_color }
+    fun named(self, name: str) -> Logger {
+        return Logger(min: self.min, name: name, use_color: self.use_color)
     }
 
     // Turn colored level tags on or off (off for files and non-terminals).
-    fun colored(self, on: Bool) -> Logger {
-        return Logger { min: self.min, name: self.name, use_color: on }
+    fun colored(self, on: bool) -> Logger {
+        return Logger(min: self.min, name: self.name, use_color: on)
     }
 
     // Whether a message at `level` would be emitted by this logger.
-    fun enabled(self, level: Level) -> Bool {
+    fun enabled(self, level: Level) -> bool {
         return level.compare(self.min) >= 0
     }
 
     // Emit `message` at `level` if the level is enabled.
-    fun log(self, level: Level, message: String) {
+    fun log(self, level: Level, message: str) {
         if self.enabled(level) {
             println(self.render(level, message))
         }
     }
 
-    fun debug(self, message: String) {
+    fun debug(self, message: str) {
         self.log(Level.Debug, message)
     }
 
-    fun info(self, message: String) {
+    fun info(self, message: str) {
         self.log(Level.Info, message)
     }
 
-    fun warn(self, message: String) {
+    fun warn(self, message: str) {
         self.log(Level.Warn, message)
     }
 
-    fun error(self, message: String) {
+    fun error(self, message: str) {
         self.log(Level.Error, message)
     }
 
     // The exact line this logger would print for `level` and `message`. Public
     // so callers (and tests) can capture output instead of printing it.
-    fun render(self, level: Level, message: String) -> String {
+    fun render(self, level: Level, message: str) -> str {
         let tag = self.tag(level)
         if self.name == "" {
             return "${tag} ${message}"
@@ -120,7 +120,7 @@ impl Logger {
         return "${tag} ${self.name}: ${message}"
     }
 
-    fun tag(self, level: Level) -> String {
+    fun tag(self, level: Level) -> str {
         if self.use_color {
             return "${level.color()}[${level.label()}]\u{1b}[0m"
         }
@@ -132,18 +132,18 @@ impl Logger {
 // colored. For different settings, use a `Logger` instance instead.
 let shared: Logger = Logger.new()
 
-fun debug(message: String) {
+fun debug(message: str) {
     shared.debug(message)
 }
 
-fun info(message: String) {
+fun info(message: str) {
     shared.info(message)
 }
 
-fun warn(message: String) {
+fun warn(message: str) {
     shared.warn(message)
 }
 
-fun error(message: String) {
+fun error(message: str) {
     shared.error(message)
 }
