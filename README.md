@@ -85,8 +85,7 @@ compare levels directly. `level.label()` gives the padded tag (`"INFO "`) and
 
 ## Requirements
 
-Needs raven 2.18.52 or newer, where `@derive(Ord)` is what puts the levels in
-order.
+Needs Raven 3.0.0 or newer. `@derive(Ord)` is what puts the levels in order.
 
 ## License
 
