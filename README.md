@@ -10,7 +10,7 @@ came from. It's just `lib.rv`, no dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-log" = "v0.1.0"
+"github.com/martian56/raven-log" = "v0.2.0"
 ```
 
 ## Usage
