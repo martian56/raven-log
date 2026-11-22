@@ -15,9 +15,10 @@
 //     log.debug("handling request")
 //
 // Lines are written to standard output as `[LEVEL] name: message`, with the
-// level tag colored when color is enabled (the default).
+// level tag colored when stdout is a terminal and NO_COLOR is unset.
 
-from std.io import println
+from std.env import get_env
+from std.io import is_terminal, println
 
 // Severity levels in ascending order, so the derived `Ord` compares them by
 // severity: `Debug < Info < Warn < Error`. A logger drops any message below
@@ -62,9 +63,13 @@ class Logger {
 }
 
 impl Logger {
-    // A logger at `Info`, unnamed, with colored level tags.
+    // A logger at `Info`, unnamed, with colored level tags on a terminal.
     fun new() -> Logger {
-        return Logger(min: Level.Info, name: "", use_color: true)
+        return Logger(
+            min: Level.Info,
+            name: "",
+            use_color: is_terminal() and get_env("NO_COLOR") == "",
+        )
     }
 
     // The minimum level to emit. Messages below it are dropped.

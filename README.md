@@ -10,7 +10,7 @@ came from. It's just `lib.rv`, no dependencies.
 
 ```toml
 [dependencies]
-"github.com/martian56/raven-log" = "v0.2.0"
+"github.com/martian56/raven-log" = "v0.3.0"
 ```
 
 ## Usage
@@ -48,9 +48,10 @@ fun main() {
 ```
 
 Lines go to standard output as `[LEVEL] name: message`. The name and its colon
-are left off when the logger doesn't have one, and the level tag is wrapped in
-an ANSI color unless you turn that off with `.colored(false)`, which is what you
-want for a log file.
+are left off when the logger doesn't have one. The level tag is colored when
+stdout is a terminal and `NO_COLOR` is unset, so output redirected to a log
+file stays plain; `.colored(true)` or `.colored(false)` overrides that. This
+needs Raven 3.3.0 or newer.
 
 ## Levels
 
@@ -63,7 +64,7 @@ its minimum, so a `Warn` logger stays quiet about `Debug` and `Info`.
 
 | Method | Description |
 |--------|-------------|
-| `Logger.new()` | A logger at `Info`, unnamed, colored |
+| `Logger.new()` | A logger at `Info`, unnamed, colored on a terminal |
 | `log.level(min)` | A copy with a new minimum level |
 | `log.named(name)` | A copy tagged with `name` |
 | `log.colored(on)` | A copy with color on or off |
