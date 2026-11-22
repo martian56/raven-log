@@ -65,7 +65,11 @@ class Logger {
 impl Logger {
     // A logger at `Info`, unnamed, with colored level tags on a terminal.
     fun new() -> Logger {
-        return Logger(min: Level.Info, name: "", use_color: is_terminal() and get_env("NO_COLOR") == "")
+        return Logger(
+            min: Level.Info,
+            name: "",
+            use_color: is_terminal() and get_env("NO_COLOR") == "",
+        )
     }
 
     // The minimum level to emit. Messages below it are dropped.
