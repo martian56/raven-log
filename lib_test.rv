@@ -26,6 +26,6 @@ fun test_render_named() {
 }
 
 fun test_render_colored_wraps_tag() {
-    let log = Logger.new()
+    let log = Logger.new().colored(true)
     assert_eq_str(log.render(Level.Warn, "x"), "\u{1b}[33m[WARN ]\u{1b}[0m x")
 }
